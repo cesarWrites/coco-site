@@ -1,0 +1,65 @@
+.page-wrapper {
+    padding: 1.5rem;
+  }
+  
+  .navbar-wrapper {
+    height: 10vh;
+  }
+  
+  .main-content {
+    max-width: 900px;
+    /* margin: 0 auto; */
+  }
+  
+  .header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .page-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+  }
+  
+  .upload-btn {
+    background: #228b22;
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: background 0.2s ease;
+  }
+  
+  .upload-btn:hover {
+    background: #1e40af; /* darker blue */
+  }
+  
+  .hidden-input {
+    display: none;
+  }
+  
+  .video-wrapper {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; /* 16:9 ratio */
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  .video-wrapper iframe {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 10px;
+  }
+  
+  .empty-text {
+    color: #666;
+    font-style: italic;
+    margin-top: 1rem;
+  }
+  

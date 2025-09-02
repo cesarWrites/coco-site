@@ -1,0 +1,46 @@
+.category-card {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.category-card a {
+  text-decoration: none;
+  color: #000000;
+}
+
+.category-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+}
+
+.category-card h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0.75rem;
+  color: #111;
+}
+
+.category-card p {
+  font-size: 0.85rem;
+  color: #444;
+  margin: 0 0.75rem 0.75rem;
+}
+
+.category-card img{
+  width: 100px;
+  height: 100px;
+}
+
+@media (max-width: 768px) {
+  .article-image {
+    height: 140px;
+  }
+
+  .category-card h3 {
+    font-size: 0.95rem;
+  }
+}
+

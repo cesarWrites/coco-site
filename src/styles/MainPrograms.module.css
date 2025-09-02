@@ -1,0 +1,59 @@
+/* styles/ProgramBannerSlider.css */
+
+.program-banner-container {
+  width: 100%;
+  aspect-ratio: 16 / 6; 
+  overflow: hidden;
+  border-radius: 12px;
+  height: 200px;
+}
+
+.program-banner-container img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover; 
+}
+
+.program-banner-slide {
+  position: relative;
+  overflow: hidden;
+  max-height: 300px; /* Or another suitable value */
+  height: 40vw;       /* Responsive height based on screen width */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.program-banner-slide:hover {
+  transform: scale(1.02);
+}
+
+.program-banner-slide::before {
+  content: "";
+  display: block;
+  padding-top: 56.25%; /* 16:9 aspect ratio */
+}
+
+.banner-img {
+  width: fit-content;
+  height: 20%;
+  object-fit: contain; 
+  display: block;
+}
+
+
+
+@media (max-width: 768px) {
+  .program-banner-container {
+    aspect-ratio: 16 / 7;
+  }
+  .banner-img{
+    object-fit: contain; 
+  }
+}
+
+@media (max-width: 480px) {
+  .program-banner-container{
+    aspect-ratio: 16 / 8;
+  }
+}
