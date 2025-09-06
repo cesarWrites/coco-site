@@ -22,32 +22,66 @@ async function fetchJsonOrNull(url) {
   }
 }
 
+// export async function getStaticPaths() {
+//   const allowedSlugs = ['business', 'technology', 'sports', 'health', 'entertainment', 'politics', 'national-news'];
+
+//   // Pre-render only the category paths (so category landing pages are always ready)
+//   const categoryPaths = allowedSlugs.map(slug => ({
+//     params: { slug: [slug] },
+//   }));
+
+//   // (Optional) Pre-render just a few recent posts for SEO / homepage speed
+//   const posts = await fetchJsonOrNull(`${BASE_URL}/posts?per_page=5&_embed=1`) || [];
+
+//   const postPaths = posts.map(post => ({
+//     params: {
+//       slug: [
+//         post._embedded?.['wp:term']?.[0]?.[0]?.slug || 'uncategorized',
+//         String(post.id),
+//         post.slug,
+//       ],
+//     },
+//   }));
+
+//   return {
+//     paths: [...categoryPaths, ...postPaths], // ✅ Very limited set
+//     fallback: 'blocking', // ✅ All others built on-demand
+//   };
+// }
+
 export async function getStaticPaths() {
-  const allowedSlugs = ['business', 'technology', 'sports', 'health', 'entertainment', 'politics', 'national-news'];
+  const allowedSlugs = [
+    'business',
+    'technology',
+    'sports',
+    'health',
+    'entertainment',
+    'politics',
+    'national-news',
+  ];
 
-  // Pre-render only the category paths (so category landing pages are always ready)
-  const categoryPaths = allowedSlugs.map(slug => ({
-    params: { slug: [slug] },
-  }));
+  let categoryPaths = [];
 
-  // (Optional) Pre-render just a few recent posts for SEO / homepage speed
-  const posts = await fetchJsonOrNull(`${BASE_URL}/posts?per_page=5&_embed=1`) || [];
-
-  const postPaths = posts.map(post => ({
-    params: {
-      slug: [
-        post._embedded?.['wp:term']?.[0]?.[0]?.slug || 'uncategorized',
-        String(post.id),
-        post.slug,
-      ],
-    },
-  }));
+  try {
+    const res = await fetch(`${BASE_URL}/categories?per_page=100`);
+    if (res.ok) {
+      const categories = await res.json();
+      categoryPaths = categories
+        .filter((cat) => allowedSlugs.includes(cat.slug))
+        .map((cat) => ({ params: { slug: [cat.slug] } }));
+    } else {
+      console.warn(`[getStaticPaths] Failed categories fetch, status ${res.status}`);
+    }
+  } catch (err) {
+    console.error(`[getStaticPaths] Error fetching categories:`, err);
+  }
 
   return {
-    paths: [...categoryPaths, ...postPaths], // ✅ Very limited set
-    fallback: 'blocking', // ✅ All others built on-demand
+    paths: categoryPaths, 
+    fallback: 'blocking', 
   };
 }
+
 
 export async function getStaticProps({ params }) {
   if (!params?.slug) {
