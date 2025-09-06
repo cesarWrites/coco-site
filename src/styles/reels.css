@@ -6,9 +6,10 @@
     height: 10vh;
   }
   
-  .main-content {
-    max-width: 900px;
+  .main-content-reels {
+    /* max-width: 900px; */
     /* margin: 0 auto; */
+    min-height: 80vh;
   }
   
   .header-row {

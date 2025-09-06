@@ -46,7 +46,7 @@ export default function ReelsPage() {
         <Navbar />
       </div>
 
-      <main className="main-content">
+      <main className="main-content-reels">
         <div className="header-row">
           <h1 className="page-title">Reels</h1>
           <UploadButton />

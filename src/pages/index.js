@@ -268,7 +268,7 @@ export default function Home({ articles }) {
 export async function getStaticProps() {
   try {
     const res = await fetch(
-      `https://cocomedia.co.ke/wp-json/wp/v2/posts?_embed=1&per_page=50&orderby=date&order=desc`,
+      `https://cocomedia.co.ke/wp-json/wp/v2/posts?_embed=1&per_page=100&orderby=date&order=desc`,
       { next: { revalidate: 1800 } }
     );
 
