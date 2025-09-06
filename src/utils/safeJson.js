@@ -1,33 +1,21 @@
-// lib/safeFetchJson.js
-export async function safeFetchJson(url, defaultValue = null, opts = {}) {
-  const retries = opts.retries ?? 2;
-  const timeoutMs = opts.timeout ?? 8000;
+export async function safeFetchJson(url, fallback = []) {
+  try {
+    const res = await fetch(url);
 
-  for (let attempt = 0; attempt <= retries; attempt++) {
-    const controller = new AbortController();
-    const id = setTimeout(() => controller.abort(), timeoutMs);
-
-    try {
-      const res = await fetch(url, { signal: controller.signal });
-      clearTimeout(id);
-
-      if (!res.ok) {
-        throw new Error(`HTTP ${res.status} ${res.statusText}`);
-      }
-
-      const json = await res.json();
-      return json;
-    } catch (err) {
-      clearTimeout(id);
-      console.error(`[safeFetchJson] attempt ${attempt} failed for ${url}:`, err.message);
-
-      if (attempt === retries) {
-        console.warn(`[safeFetchJson] returning default value for ${url}`);
-        return defaultValue;
-      }
-      // exponential-ish backoff
-      await new Promise((r) => setTimeout(r, 300 * (attempt + 1)));
+    if (!res.ok) {
+      console.error(`[safeFetchJson] Failed: ${url}, status=${res.status}`);
+      return fallback;
     }
+
+    const contentType = res.headers.get("content-type") || "";
+    if (!contentType.includes("application/json")) {
+      console.error(`[safeFetchJson] Non-JSON response from ${url}`);
+      return fallback;
+    }
+
+    return await res.json();
+  } catch (err) {
+    console.error(`[safeFetchJson] Error fetching ${url}:`, err);
+    return fallback;
   }
-  return defaultValue;
 }

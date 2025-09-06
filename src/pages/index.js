@@ -10,6 +10,7 @@ import LiveVideoStream from "@/components/LiveVideoChannel";
 import Link from 'next/link';
 import MainNewsCard from "@/components/MainNewsCard";
 import { normalizeArticle } from "@/utils/normalizeArticles";
+import { safeFetchJson } from '@/utils/safeJson';
 
 
 export default function Home({ articles }) {
@@ -265,64 +266,101 @@ export default function Home({ articles }) {
   );
 }
 
+// export async function getStaticProps() {
+//   try {
+//     const res = await fetch(
+//       `https://cocomedia.co.ke/wp-json/wp/v2/posts?_embed=1&per_page=100&orderby=date&order=desc`,
+//       { next: { revalidate: 1800 } }
+//     );
+
+//     if (!res.ok) {
+//       console.error(`Failed to fetch articles: ${res.status}`);
+//       return { props: { articles: [] }, revalidate: 1800 };
+//     }
+
+//     let articlesRaw = [];
+//     try {
+//       articlesRaw = await res.json();
+//       if (!Array.isArray(articlesRaw)) {
+//         console.error("API did not return an array for articles.");
+//         return { props: { articles: [] }, revalidate: 1800 };
+//       }
+//     } catch (parseErr) {
+//       console.error("Error parsing articles JSON:", parseErr);
+//       return { props: { articles: [] }, revalidate: 1800 };
+//     }
+
+//     const articles = articlesRaw.map(article => {
+//       try {
+//         let authorName = "Unknown Author";
+
+//         if (article.author && typeof article.author === "string") {
+//           authorName = article.author;
+//         } else if (article._embedded?.author?.[0]?.name) {
+//           authorName = article._embedded.author[0].name;
+//         } else if (article.yoast_head_json?.schema?.["@graph"]) {
+//           const authorObj = article.yoast_head_json.schema["@graph"]
+//             .find(item => item["@type"] === "Person" && item.name);
+//           if (authorObj) {
+//             authorName = authorObj.name;
+//           }
+//         }
+
+//         return { ...article, authorName };
+//       } catch (err) {
+//         console.error(`Error processing article ID ${article?.id}:`, err);
+//         return { ...article, authorName: "Unknown Author" };
+//       }
+//     });
+
+//     return {
+//       props: { articles },
+//       revalidate: 1800,
+//     };
+
+//   } catch (error) {
+//     console.error("Error fetching articles:", error);
+//     return {
+//       props: { articles: [] },
+//       revalidate: 1800,
+//     };
+//   }
+// }
+
+
 export async function getStaticProps() {
-  try {
-    const res = await fetch(
-      `https://cocomedia.co.ke/wp-json/wp/v2/posts?_embed=1&per_page=100&orderby=date&order=desc`,
-      { next: { revalidate: 1800 } }
-    );
+  const articlesRaw = await safeFetchJson(
+    `https://cocomedia.co.ke/wp-json/wp/v2/posts?_embed=1&per_page=100&orderby=date&order=desc`,
+    [] // fallback
+  );
 
-    if (!res.ok) {
-      console.error(`Failed to fetch articles: ${res.status}`);
-      return { props: { articles: [] }, revalidate: 1800 };
-    }
-
-    let articlesRaw = [];
-    try {
-      articlesRaw = await res.json();
-      if (!Array.isArray(articlesRaw)) {
-        console.error("API did not return an array for articles.");
-        return { props: { articles: [] }, revalidate: 1800 };
-      }
-    } catch (parseErr) {
-      console.error("Error parsing articles JSON:", parseErr);
-      return { props: { articles: [] }, revalidate: 1800 };
-    }
-
-    const articles = articlesRaw.map(article => {
-      try {
+  // Always ensure it's an array
+  const articles = Array.isArray(articlesRaw)
+    ? articlesRaw.map(article => {
         let authorName = "Unknown Author";
 
-        if (article.author && typeof article.author === "string") {
-          authorName = article.author;
-        } else if (article._embedded?.author?.[0]?.name) {
-          authorName = article._embedded.author[0].name;
-        } else if (article.yoast_head_json?.schema?.["@graph"]) {
-          const authorObj = article.yoast_head_json.schema["@graph"]
-            .find(item => item["@type"] === "Person" && item.name);
-          if (authorObj) {
-            authorName = authorObj.name;
+        try {
+          if (typeof article.author === "string") {
+            authorName = article.author;
+          } else if (article._embedded?.author?.[0]?.name) {
+            authorName = article._embedded.author[0].name;
+          } else if (article.yoast_head_json?.schema?.["@graph"]) {
+            const authorObj = article.yoast_head_json.schema["@graph"].find(
+              (item) => item["@type"] === "Person" && item.name
+            );
+            if (authorObj) authorName = authorObj.name;
           }
+        } catch (err) {
+          console.error(`Author parse failed for article ${article?.id}`, err);
         }
 
         return { ...article, authorName };
-      } catch (err) {
-        console.error(`Error processing article ID ${article?.id}:`, err);
-        return { ...article, authorName: "Unknown Author" };
-      }
-    });
+      })
+    : [];
 
-    return {
-      props: { articles },
-      revalidate: 1800,
-    };
-
-  } catch (error) {
-    console.error("Error fetching articles:", error);
-    return {
-      props: { articles: [] },
-      revalidate: 1800,
-    };
-  }
+  return {
+    props: { articles },
+    revalidate: 1800, // ISR
+  };
 }
 

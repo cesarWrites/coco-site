@@ -3,9 +3,9 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ArticleView from '@/components/ArticlePage';
 import CategoryCard from '@/components/CategoryCard';
+import { REVALIDATE, BASE_URL } from '@/utils/config';
 import { safeFetchJson } from '@/utils/safeJson';
-import { REVALIDATE } from '@/utils/config';
-import { BASE_URL } from '@/utils/config';
+
 
 async function fetchJsonOrNull(url) {
   try {
@@ -51,73 +51,76 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }) {
   if (!params?.slug) {
-    return { notFound: true };
+    return { props: { pageType: null, articles: [] }, revalidate: REVALIDATE };
   }
 
-  // CATEGORY PAGE
-  if (params.slug.length === 1) {
-    const categorySlug = params.slug[0];
-    const categories = await fetchJsonOrNull(`${BASE_URL}/categories?slug=${categorySlug}`);
+  try {
+    // CATEGORY PAGE
+    if (params.slug.length === 1) {
+      const categorySlug = params.slug[0];
 
-    if (!categories || categories.length === 0) {
+      const categories = await safeFetchJson(`${BASE_URL}/categories?slug=${categorySlug}`, []);
+      const category = categories?.[0];
+
+      if (!category) {
+        console.warn(`[getStaticProps] No category for slug: ${categorySlug}`);
+        return { props: { pageType: 'category', categoryName: categorySlug, articles: [] }, revalidate: REVALIDATE };
+      }
+
+      const articles = await safeFetchJson(
+        `${BASE_URL}/posts?categories=${category.id}&_embed=1&per_page=20&orderby=date&order=desc`,
+        []
+      );
+
       return {
-        props: { pageType: 'category', categoryName: categorySlug, articles: [] },
+        props: { pageType: 'category', categoryName: category.name, articles },
         revalidate: REVALIDATE,
       };
     }
 
-    const category = categories[0];
-    const articles = await fetchJsonOrNull(`${BASE_URL}/posts?categories=${category.id}&per_page=10&_embed=1`) || [];
+    // ARTICLE PAGE
+    if (params.slug.length === 3) {
+      const articleId = params.slug[1];
+      const article = await safeFetchJson(`${BASE_URL}/posts/${articleId}?_embed=1`, null);
 
-    return {
-      props: {
-        pageType: 'category',
-        categoryName: category.name,
-        articles,
-      },
-      revalidate: REVALIDATE,
-    };
-  }
+      if (!article) {
+        console.warn(`[getStaticProps] No article found for id: ${articleId}`);
+        return { props: { pageType: 'article', article: null }, revalidate: REVALIDATE };
+      }
 
-  // ARTICLE PAGE
-  if (params.slug.length === 3) {
-    const articleId = params.slug[1];
-    const article = await fetchJsonOrNull(`${BASE_URL}/posts/${articleId}?_embed=1`);
+      // Related + latest
+      const categoryIds = article.categories || [];
+      const relatedArticles = categoryIds.length
+        ? (await safeFetchJson(
+            `${BASE_URL}/posts?categories=${categoryIds[0]}&per_page=10&_embed=1`,
+            []
+          )).filter(p => p.id !== article.id).slice(0, 4)
+        : [];
 
-    // ✅ If fetch failed, skip instead of breaking build
-    if (!article || article.code === 'rest_post_invalid_id') {
+      const latestArticles = (await safeFetchJson(`${BASE_URL}/posts?per_page=5&_embed=1`, []))
+        .filter(p => p.id !== article.id);
+
       return {
         props: {
           pageType: 'article',
-          article: null,
-          latestArticles: [],
-          relatedArticles: [],
+          article,
+          relatedArticles,
+          latestArticles,
         },
         revalidate: REVALIDATE,
       };
     }
 
-    const categoryIds = article._embedded?.['wp:term']?.[0]?.map(cat => cat.id) || [];
-
-    let relatedArticles = [];
-    if (categoryIds.length > 0) {
-      const related = await fetchJsonOrNull(`${BASE_URL}/posts?categories=${categoryIds[0]}&per_page=10&_embed=1`);
-      if (related) {
-        relatedArticles = related.filter(p => p.id !== article.id).slice(0, 4);
-      }
-    }
-
-    const latest = await fetchJsonOrNull(`${BASE_URL}/posts?per_page=5&_embed=1`);
-    const latestArticles = (latest || []).filter(p => p.id !== article.id);
-
+    return { props: { pageType: null, articles: [] }, revalidate: REVALIDATE };
+  } catch (err) {
+    console.error(`[getStaticProps] Fatal error for slug=${params.slug.join('/')}`, err);
     return {
-      props: { pageType: 'article', article, relatedArticles, latestArticles },
+      props: { pageType: null, articles: [] },
       revalidate: REVALIDATE,
     };
   }
-
-  return { notFound: true };
 }
+
 
 
 
