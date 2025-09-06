@@ -35,9 +35,14 @@ export default function ReelsPage() {
   const [youtubeUrl, setYoutubeUrl] = useState("");
 
   useEffect(() => {
-    fetch("https://cocomedia.co.ke/wp-json/reels/v1/settings")
+    fetch("https://cocomedia.co.ke/wp-json/reels/v1/list")
       .then((res) => res.json())
-      .then((data) => setYoutubeUrl(data.youtube_url));
+      .then((data) => {
+        if (data && data.livestream_url) {
+          setYoutubeUrl(data.livestream_url);
+        }
+      })
+      .catch((err) => console.error("Error fetching reels data:", err));
   }, []);
 
   return (
@@ -53,19 +58,59 @@ export default function ReelsPage() {
         </div>
 
         {youtubeUrl ? (
-          <div className="video-wrapper">
-            <iframe
-              src={youtubeUrl}
-              title="YouTube Livestream"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
-          </div>
-        ) : (
-          <p className="empty-text">No livestream available.</p>
-        )}
+  <div className="video-wrapper">
+    <iframe
+      src={youtubeUrl.replace("watch?v=", "embed/")} // convert if needed
+      title="YouTube Livestream"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowFullScreen
+    />
+  </div>
+) : (
+  <p className="empty-text">No livestream available.</p>
+)}
+
       </main>
-      <Footer/>
+      <Footer />
     </div>
   );
 }
+
+// export default function ReelsPage() {
+//   const [youtubeUrl, setYoutubeUrl] = useState("");
+
+//   useEffect(() => {
+//     fetch("https://cocomedia.co.ke/wp-json/reels/v1/settings")
+//       .then((res) => res.json())
+//       .then((data) => setYoutubeUrl(data.youtube_url));
+//   }, []);
+
+//   return (
+//     <div className="page-wrapper">
+//       <div className="h-[10vh]">
+//         <Navbar />
+//       </div>
+
+//       <main className="main-content-reels">
+//         <div className="header-row">
+//           <h1 className="page-title">Reels</h1>
+//           <UploadButton />
+//         </div>
+
+//         {youtubeUrl ? (
+//           <div className="video-wrapper">
+//             <iframe
+//               src={youtubeUrl}
+//               title="YouTube Livestream"
+//               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+//               allowFullScreen
+//             />
+//           </div>
+//         ) : (
+//           <p className="empty-text">No livestream available.</p>
+//         )}
+//       </main>
+//       <Footer/>
+//     </div>
+//   );
+// }

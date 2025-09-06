@@ -116,6 +116,7 @@
     transition: box-shadow 0.2s ease-in-out;
     display: flex;
     flex-direction: column;
+    padding: 1.0rem;
   }
   
   .news-card:hover {

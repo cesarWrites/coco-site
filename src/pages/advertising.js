@@ -23,22 +23,17 @@ export default function AdvertisingPage() {
       <div className="advertising-page">
       <h1 className="page-title">Advertising Promos</h1>
 
-      {files.length === 0 ? (
-        <p className="empty-text">No promotional content available yet.</p>
-      ) : (
-        <div className="promo-grid">
-          {files.map((f, i) => (
-            <div key={i} className="promo-card">
-              {f.url.endsWith(".mp4") ? (
-                <video src={f.url} controls className="promo-media" />
-              ) : (
-                <img src={f.url} alt={f.name} className="promo-media" />
-              )}
-              <div className="promo-name">{f.name}</div>
-            </div>
-          ))}
-        </div>
-      )}
+      {files.map((f, i) => (
+  <div key={i} className="promo-card">
+    {f.url.endsWith(".mp4") || f.url.endsWith(".webm") || f.url.endsWith(".mov") ? (
+      <video src={f.url} controls className="promo-media" />
+    ) : (
+      <img src={f.url} alt={f.name || `promo-${i}`} className="promo-media" />
+    )}
+  </div>
+))}
+
+
     </div>
     <ChatButton/>
     </main>
