@@ -1,5 +1,4 @@
 import Navbar from "@/components/Navbar";
-import "../styles/about.css"
 import Footer from "@/components/Footer";
 
 const team = [

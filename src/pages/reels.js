@@ -1,7 +1,6 @@
 "use client";
 import Navbar from "@/components/Navbar";
 import { useState, useEffect } from "react";
-import "../styles/reels.css"; 
 import Footer from "@/components/Footer";
 
 function UploadButton() {

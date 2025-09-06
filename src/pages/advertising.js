@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
-import "../styles/advertising.css";
 import Footer from "@/components/Footer";
 import ChatButton from "@/components/ChatButton";
 

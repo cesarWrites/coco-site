@@ -6,7 +6,9 @@ import "../styles/Navbar.css";
 import "../styles/article.css";
 import "../styles/CategoryCard.module.css";
 import "../styles/LiveVideo.css";
-
+import "../styles/advertising.css";
+import "../styles/reels.css"; 
+import "../styles/about.css"
 import Head from 'next/head';
 
 function MyApp({ Component, pageProps }) {
