@@ -29,7 +29,7 @@ export default function Home({ articles }) {
   }, [articles, setArticles]);
 
 
-  
+
   const main = normalizedArticles[0];
   const sideArticles = normalizedArticles.slice(1, 5);
   const moreArticles = normalizedArticles.slice(1,12);

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { formatDistanceToNowStrict } from 'date-fns';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { primeArticleCache } from '@/store/articles';
 
 export default function NewsCard({ article, isMain = false, compact = false }) {
   if (!article) return null;
@@ -19,7 +20,9 @@ export default function NewsCard({ article, isMain = false, compact = false }) {
 
   return (
     <div className={`news-card ${isMain ? "main-card" : ""} ${compact ? "compact-card" : ""}`}>
-     <Link href={`/${categorySlug}/${article.id}/${article.slug}`}>
+     <Link href={`/${categorySlug}/${article.id}/${article.slug}`} 
+     onMouseEnter={() => primeArticleCache(article)}  // pre-warm on hover
+     onClick={() => primeArticleCache(article)}>
           {article.title?.rendered} 
       <img
         // src={article.image}
