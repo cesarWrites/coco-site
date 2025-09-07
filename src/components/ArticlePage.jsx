@@ -2,6 +2,7 @@
 import { formatArticleDate } from "@/utils/dateHelper";
 import { normalizeArticle } from "@/utils/normalizeArticles";
 import TrendingCard from "./TrendingCard";
+import { useArticleStore } from "@/store/articles";
 
 import {
     FaFacebookF,
@@ -14,7 +15,6 @@ import {
   
   export default function ArticleView({ article, relatedArticles, latestArticles, trendingArticles}) {
     if (!article?.id) return <div>Loading content...</div>;
-
     // const normalizedArticles = articles.map(normalizeArticle);
     const normalizedLatest = latestArticles.map(normalizeArticle);
     const normalizedRelated = relatedArticles.map(normalizeArticle);
