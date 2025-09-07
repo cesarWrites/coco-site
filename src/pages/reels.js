@@ -46,6 +46,7 @@ export default function ReelsPage() {
   }, []);
 
   return (
+    <div>
     <div className="page-wrapper">
       <div className="h-[10vh]">
         <Navbar />
@@ -58,9 +59,9 @@ export default function ReelsPage() {
         </div>
 
         {youtubeUrl ? (
-  <div className="video-wrapper">
+  <div className="video-wrapper-reels">
     <iframe
-      src={youtubeUrl.replace("watch?v=", "embed/")} // convert if needed
+      src={youtubeUrl.replace("watch?v=", "embed/")} 
       title="YouTube Livestream"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
       allowFullScreen
@@ -71,7 +72,8 @@ export default function ReelsPage() {
 )}
 
       </main>
-      <Footer />
+    </div>
+    <Footer />
     </div>
   );
 }

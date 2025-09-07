@@ -223,6 +223,7 @@ export default function SlugPage({
   }
 
   return (
+    <div>
     <div className="page-wrapper">
       <Navbar />
       <main className="main-content">
@@ -252,7 +253,8 @@ export default function SlugPage({
           />
         )}
       </main>
-      <Footer />
+    </div>
+    <Footer />
     </div>
   );
 }

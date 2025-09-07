@@ -37,9 +37,9 @@ export default function AdvertisingPage() {
     </div>
     <ChatButton/>
     </main>
+    </div>
+    </div>
     <Footer/>
-    </div>
-    </div>
     </div>
   );
 }

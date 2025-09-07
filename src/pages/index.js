@@ -43,6 +43,7 @@ export default function Home({ articles }) {
 
 
   return (
+    <div>
     <div className="page-wrapper">
       <div className="h-[10vh]">
         <Navbar />
@@ -245,7 +246,6 @@ export default function Home({ articles }) {
 
         </div>
       </main>
-      <Footer />
       {(isMobile && !showLive) &&(
         <div
           className="floating-live-icon"
@@ -262,6 +262,8 @@ export default function Home({ articles }) {
           <LiveStreamCard />
         </div>
       )}
+    </div>
+    <Footer />
     </div>
   );
 }

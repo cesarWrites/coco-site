@@ -91,6 +91,7 @@ const team = [
 
 export default function AboutUs() {
   return (
+    <div>
     <div className="page-wrapper">
       <div className="h-[10vh]">
       <Navbar />
@@ -109,7 +110,8 @@ export default function AboutUs() {
           </div>
         ))}
       </div>
-    <Footer/>
     </div>
+    <Footer/>
+  </div>
   );
 }
