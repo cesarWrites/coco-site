@@ -1,4 +1,3 @@
-// components/ArticleView.js
 import { formatArticleDate } from "@/utils/dateHelper";
 import { normalizeArticle } from "@/utils/normalizeArticles";
 import TrendingCard from "./TrendingCard";
