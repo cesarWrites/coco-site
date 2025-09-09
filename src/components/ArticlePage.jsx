@@ -22,6 +22,7 @@ import {
     const title = article.title?.rendered;
     const excerpt = article.excerpt?.rendered;
     const content = article.content?.rendered;
+    console.log("Content", content, "+", title)
     const image =
       article._embedded?.['wp:featuredmedia']?.[0]?.source_url || '/default.jpg';
     // const author = article._embedded?.author?.[0]?.name || 'Unknown Author';
