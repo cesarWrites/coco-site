@@ -1,215 +1,3 @@
-// import { useRouter } from 'next/router';
-// import Navbar from '@/components/Navbar';
-// import Footer from '@/components/Footer';
-// import ArticleView from '@/components/ArticlePage';
-// import CategoryCard from '@/components/CategoryCard';
-// import { REVALIDATE, BASE_URL } from '@/utils/config';
-// import { safeFetchJson } from '@/utils/safeJson';
-// import { useArticleStore } from '@/store/articles';
-
-// // Helper fetch with safe null
-// async function fetchJsonOrNull(url) {
-//   try {
-//     const res = await fetch(url);
-//     const contentType = res.headers.get('content-type') || '';
-//     if (!contentType.includes('application/json') || !res.ok) {
-//       console.error(`Failed fetching JSON from ${url}, status: ${res.status}`);
-//       return null;
-//     }
-//     return await res.json();
-//   } catch (e) {
-//     console.error(`Error fetching ${url}:`, e);
-//     return null;
-//   }
-// }
-
-// export async function getStaticPaths() {
-//   const allowedSlugs = [
-//     'business',
-//     'technology',
-//     'sports',
-//     'health',
-//     'entertainment',
-//     'politics',
-//     'national-news',
-//   ];
-
-//   let categoryPaths = [];
-
-//   try {
-//     const res = await fetch(`${BASE_URL}/categories?per_page=100`);
-//     if (res.ok) {
-//       const categories = await res.json();
-//       categoryPaths = categories
-//         .filter((cat) => allowedSlugs.includes(cat.slug))
-//         .map((cat) => ({ params: { slug: [cat.slug] } }));
-//     } else {
-//       console.warn(`[getStaticPaths] Failed categories fetch, status ${res.status}`);
-//     }
-//   } catch (err) {
-//     console.error(`[getStaticPaths] Error fetching categories:`, err);
-//   }
-
-//   return {
-//     paths: categoryPaths,
-//     fallback: 'blocking',
-//   };
-// }
-
-// export async function getStaticProps({ params }) {
-//   if (!params?.slug) {
-//     return { props: { pageType: null, articles: [] }, revalidate: REVALIDATE };
-//   }
-
-//   try {
-//     // CATEGORY PAGE
-//     if (params.slug.length === 1) {
-//       const categorySlug = params.slug[0];
-
-//       const categories = await safeFetchJson(
-//         `${BASE_URL}/categories?slug=${categorySlug}`,
-//         []
-//       );
-//       const category = categories?.[0];
-
-//       if (!category) {
-//         return {
-//           props: { pageType: 'category', categoryName: categorySlug, articles: [] },
-//           revalidate: REVALIDATE,
-//         };
-//       }
-
-//       const articles = await safeFetchJson(
-//         `${BASE_URL}/posts?categories=${category.id}&_embed=1&per_page=20&orderby=date&order=desc`,
-//         []
-//       );
-
-//       return {
-//         props: { pageType: 'category', categoryName: category.name, articles },
-//         revalidate: REVALIDATE,
-//       };
-//     }
-
-//     // ARTICLE PAGE
-//     if (params.slug.length === 3) {
-//       const articleId = params.slug[1];
-//       const article = await safeFetchJson(
-//         `${BASE_URL}/posts/${articleId}?_embed=1`,
-//         null
-//       );
-
-//       if (!article) {
-//         return { props: { pageType: 'article', article: null }, revalidate: REVALIDATE };
-//       }
-
-//       // Related + latest
-//       const categoryIds = article.categories || [];
-//       const relatedArticles = categoryIds.length
-//         ? (await safeFetchJson(
-//             `${BASE_URL}/posts?categories=${categoryIds[0]}&per_page=10&_embed=1`,
-//             []
-//           )).filter((p) => p.id !== article.id).slice(0, 4)
-//         : [];
-
-//       const latestArticles = (await safeFetchJson(
-//         `${BASE_URL}/posts?per_page=5&_embed=1`,
-//         []
-//       )).filter((p) => p.id !== article.id);
-
-//       return {
-//         props: {
-//           pageType: 'article',
-//           article,
-//           relatedArticles,
-//           latestArticles,
-//         },
-//         revalidate: REVALIDATE,
-//       };
-//     }
-
-//     return { props: { pageType: null, articles: [] }, revalidate: REVALIDATE };
-//   } catch (err) {
-//     console.error(`[getStaticProps] Fatal error for slug=${params.slug.join('/')}`, err);
-//     return {
-//       props: { pageType: null, articles: [] },
-//       revalidate: REVALIDATE,
-//     };
-//   }
-// }
-
-// export default function SlugPage({
-//   pageType,
-//   article,
-//   articles = [],
-//   categoryName,
-//   relatedArticles = [],
-//   latestArticles = [],
-//   trendingArticles = [],
-// }) {
-//   const router = useRouter();
-//   const getArticleById = useArticleStore((s) => s.getArticleById);
-//   const setArticle = useArticleStore((s) => s.setArticle);
-
-//   if (router.isFallback) {
-//     return <div>Loading...</div>;
-//   }
-
-//   // ✅ Article caching logic
-//   let articleToRender = article;
-//   if (pageType === 'article' && article?.id) {
-//     const cached = getArticleById(article.id);
-//     if (cached) {
-//       articleToRender = cached; // show immediately
-//       if (!article.content?.rendered) {
-//         // background refresh
-//         safeFetchJson(`${BASE_URL}/posts/${article.id}?_embed=1`, null).then(
-//           (fresh) => {
-//             if (fresh) setArticle(fresh.id, fresh);
-//           }
-//         );
-//       }
-//     } else {
-//       setArticle(article.id, article);
-//     }
-//   }
-
-//   return (
-//     <div>
-//       <div className="page-wrapper">
-//         <Navbar />
-//         <main className="main-content">
-//           {/* Category page */}
-//           {pageType === 'category' && (
-//             <div className="category-container">
-//               <h1 className="category-title">{categoryName || 'Category'}</h1>
-//               <div className="articles-grid">
-//                 {articles.length > 0 ? (
-//                   articles.map((art) => (
-//                     <CategoryCard key={art.id} article={art} />
-//                   ))
-//                 ) : (
-//                   <p>No articles found.</p>
-//                 )}
-//               </div>
-//             </div>
-//           )}
-
-//           {/* Article page */}
-//           {pageType === 'article' && articleToRender?.id && (
-//             <ArticleView
-//               article={articleToRender}
-//               relatedArticles={relatedArticles}
-//               latestArticles={latestArticles}
-//               trendingArticles={trendingArticles}
-//             />
-//           )}
-//         </main>
-//       </div>
-//       <Footer />
-//     </div>
-//   );
-// }
-
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Navbar from '@/components/Navbar';
@@ -219,59 +7,205 @@ import CategoryCard from '@/components/CategoryCard';
 import { REVALIDATE, BASE_URL } from '@/utils/config';
 import { useArticleStore } from '@/store/articles';
 
-// Helper with retry
-async function retryFetchJson(url, retries = 3, delay = 2000) {
-  for (let i = 0; i < retries; i++) {
-    try {
-      const res = await fetch(url);
-      if (res.ok) return await res.json();
-    } catch {}
-    await new Promise((r) => setTimeout(r, delay));
+// -------- Robust fetch wrapper --------
+async function tryFetch(url, fallback) {
+  try {
+    const res = await fetch(url);
+    if (!res.ok) return fallback;
+    return await res.json();
+  } catch {
+    return fallback;
   }
-  return null;
 }
 
+// -------- Pre-generate important slugs --------
 export async function getStaticPaths() {
-  return { paths: [], fallback: 'blocking' };
-}
+  const allowedSlugs = [
+    'business',
+    'technology',
+    'sports',
+    'health',
+    'entertainment',
+    'politics',
+    'national-news',
+  ];
 
-export async function getStaticProps({ params }) {
+  // Category paths
+  let categoryPaths = [];
+  try {
+    const categories = await tryFetch(`${BASE_URL}/categories?per_page=100`, []);
+    categoryPaths = categories
+      .filter((cat) => allowedSlugs.includes(cat.slug))
+      .map((cat) => ({ params: { slug: [cat.slug] } }));
+  } catch {
+    categoryPaths = [];
+  }
+
+  // A few article paths
+  let postPaths = [];
+  try {
+    const posts = await tryFetch(`${BASE_URL}/posts?per_page=10&_embed=1`, []);
+    postPaths = posts.map((post) => ({
+      params: {
+        slug: [
+          post._embedded?.['wp:term']?.[0]?.[0]?.slug || 'uncategorized',
+          String(post.id),
+          post.slug,
+        ],
+      },
+    }));
+  } catch {
+    postPaths = [];
+  }
+
   return {
-    props: { slugParts: params?.slug || [] },
-    revalidate: REVALIDATE,
+    paths: [...categoryPaths, ...postPaths],
+    fallback: 'blocking',
   };
 }
 
-export default function SlugPage({ slugParts }) {
-  const router = useRouter();
-  const { getArticleById, setArticle } = useArticleStore();
-  const [article, setArticleState] = useState(null);
-  const [related, setRelated] = useState([]);
-  const [latest, setLatest] = useState([]);
+// -------- Data fetching for each slug --------
+export async function getStaticProps({ params }) {
+  if (!params?.slug) {
+    return { props: { pageType: null }, revalidate: REVALIDATE };
+  }
 
-  useEffect(() => {
-    if (slugParts.length === 3) {
-      const articleId = slugParts[1];
-      const cached = getArticleById(articleId);
-      if (cached) {
-        setArticleState(cached);
+  try {
+    // Category page
+    if (params.slug.length === 1) {
+      const categorySlug = params.slug[0];
+      const categories = await tryFetch(
+        `${BASE_URL}/categories?slug=${categorySlug}`,
+        []
+      );
+      const category = categories?.[0];
+
+      if (!category) {
+        return {
+          props: { pageType: 'category', categoryName: categorySlug, articles: [] },
+          revalidate: REVALIDATE,
+        };
       }
 
-      // fetch fresh
-      retryFetchJson(`${BASE_URL}/posts/${articleId}?_embed=1`).then((fresh) => {
-        if (fresh) {
+      const articles = await tryFetch(
+        `${BASE_URL}/posts?categories=${category.id}&_embed=1&per_page=20&orderby=date&order=desc`,
+        []
+      );
+
+      return {
+        props: { pageType: 'category', categoryName: category.name, articles },
+        revalidate: REVALIDATE,
+      };
+    }
+
+    // Article page
+    if (params.slug.length === 3) {
+      const articleId = params.slug[1];
+      const article = await tryFetch(
+        `${BASE_URL}/posts/${articleId}?_embed=1`,
+        null
+      );
+
+      if (!article) {
+        return { props: { pageType: 'article', article: null }, revalidate: REVALIDATE };
+      }
+
+      const categoryIds = article.categories || [];
+      const relatedArticles = categoryIds.length
+        ? (await tryFetch(
+            `${BASE_URL}/posts?categories=${categoryIds[0]}&per_page=5&_embed=1`,
+            []
+          )).filter((p) => p.id !== article.id)
+        : [];
+
+      const latestArticles = (await tryFetch(
+        `${BASE_URL}/posts?per_page=5&_embed=1`,
+        []
+      )).filter((p) => p.id !== article.id);
+
+      return {
+        props: {
+          pageType: 'article',
+          article,
+          relatedArticles,
+          latestArticles,
+        },
+        revalidate: REVALIDATE,
+      };
+    }
+
+    return { props: { pageType: null }, revalidate: REVALIDATE };
+  } catch {
+    return { props: { pageType: null }, revalidate: REVALIDATE };
+  }
+}
+
+// -------- Component --------
+export default function SlugPage({
+  pageType,
+  article,
+  articles = [],
+  categoryName,
+  relatedArticles = [],
+  latestArticles = [],
+}) {
+  const router = useRouter();
+  const { getArticleById, setArticle } = useArticleStore();
+
+  // Article state
+  const [articleState, setArticleState] = useState(article);
+
+  // Category state
+  const [categoryArticles, setCategoryArticles] = useState(articles);
+  const [categoryLabel, setCategoryLabel] = useState(categoryName);
+
+  // Hydrate + background refetch for article
+  useEffect(() => {
+    if (pageType === 'article' && article?.id) {
+      const cached = getArticleById(article.id);
+      if (cached) {
+        setArticleState(cached); // immediate
+      } else {
+        setArticle(article.id, article);
+      }
+
+      // background refetch
+      (async () => {
+        const fresh = await tryFetch(
+          `${BASE_URL}/posts/${article.id}?_embed=1`,
+          null
+        );
+        if (fresh?.id) {
           setArticle(fresh.id, fresh);
           setArticleState(fresh);
-          if (fresh.categories?.length) {
-            retryFetchJson(`${BASE_URL}/posts?categories=${fresh.categories[0]}&_embed=1&per_page=5`)
-              .then((ra) => setRelated(ra?.filter((a) => a.id !== fresh.id) || []));
-          }
-          retryFetchJson(`${BASE_URL}/posts?_embed=1&per_page=5`)
-            .then((la) => setLatest(la?.filter((a) => a.id !== fresh.id) || []));
         }
-      });
+      })();
     }
-  }, [slugParts, getArticleById, setArticle]);
+  }, [pageType, article, getArticleById, setArticle]);
+
+  // Hydrate + background refetch for category
+  useEffect(() => {
+    if (pageType === 'category' && categoryName) {
+      // background refetch
+      (async () => {
+        const cats = await tryFetch(
+          `${BASE_URL}/categories?slug=${categoryName.toLowerCase()}`,
+          []
+        );
+        const category = cats?.[0];
+        if (category?.id) {
+          const fresh = await tryFetch(
+            `${BASE_URL}/posts?categories=${category.id}&_embed=1&per_page=20&orderby=date&order=desc`,
+            []
+          );
+          if (fresh?.length) {
+            setCategoryArticles(fresh);
+            setCategoryLabel(category.name);
+          }
+        }
+      })();
+    }
+  }, [pageType, categoryName]);
 
   if (router.isFallback) return <div>Loading…</div>;
 
@@ -279,21 +213,33 @@ export default function SlugPage({ slugParts }) {
     <div className="page-wrapper">
       <Navbar />
       <main className="main-content">
-        {slugParts.length === 3 && article ? (
+        {/* Category page */}
+        {pageType === 'category' && (
+          <div className="category-container">
+            <h1 className="category-title">{categoryLabel || 'Category'}</h1>
+            <div className="articles-grid">
+              {categoryArticles.length > 0 ? (
+                categoryArticles.map((art) => (
+                  <CategoryCard key={art.id} article={art} />
+                ))
+              ) : (
+                <p>No articles found in {categoryLabel}.</p>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Article page */}
+        {pageType === 'article' && articleState?.id && (
           <ArticleView
-            article={article}
-            relatedArticles={related}
-            latestArticles={latest}
+            article={articleState}
+            relatedArticles={relatedArticles}
+            latestArticles={latestArticles}
             trendingArticles={[]}
           />
-        ) : (
-          <p>No article found.</p>
         )}
-        {slugParts.length === 1 && <p>Category page coming…</p>}
       </main>
       <Footer />
     </div>
   );
 }
-
-
