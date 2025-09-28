@@ -1,7 +1,7 @@
 // next.config.js
 /** @type {import('next').NextConfig} */
-const BACKEND_ORIGIN = process.env.BACKEND_ORIGIN || 'https://cocomedia.co.ke/';
-const SITE_ORIGIN = process.env.SITE_ORIGIN || 'https://cocomedia.co.ke/';
+const BACKEND_ORIGIN = process.env.BACKEND_ORIGIN || 'https://cocomedia.co.ke';
+const SITE_ORIGIN = process.env.SITE_ORIGIN || 'https://cocomedia.co.ke';
 
 const nextConfig = {
   reactStrictMode: true,
