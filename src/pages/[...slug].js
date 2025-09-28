@@ -7,7 +7,7 @@ import CategoryCard from '@/components/CategoryCard';
 import { REVALIDATE, BASE_URL } from '@/utils/config';
 import { useArticleStore } from '@/store/articles';
 
-// -------- Robust fetch wrapper --------
+
 async function tryFetch(url, fallback) {
   try {
     const res = await fetch(url);
@@ -18,7 +18,7 @@ async function tryFetch(url, fallback) {
   }
 }
 
-// -------- Pre-generate important slugs --------
+
 export async function getStaticPaths() {
   const allowedSlugs = [
     'business',
@@ -30,7 +30,7 @@ export async function getStaticPaths() {
     'national-news',
   ];
 
-  // Category paths
+
   let categoryPaths = [];
   try {
     const categories = await tryFetch(`${BASE_URL}/categories?per_page=100`, []);
@@ -210,6 +210,7 @@ export default function SlugPage({
   if (router.isFallback) return <div>Loading…</div>;
 
   return (
+    <div>
     <div className="page-wrapper">
       <Navbar />
       <main className="main-content">
@@ -239,6 +240,7 @@ export default function SlugPage({
           />
         )}
       </main>
+      </div>
       <Footer />
     </div>
   );
