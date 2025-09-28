@@ -7,64 +7,31 @@ import CategoryCard from '@/components/CategoryCard';
 import { REVALIDATE, BASE_URL } from '@/utils/config';
 import { useArticleStore } from '@/store/articles';
 
-
-async function tryFetch(url, fallback) {
+// ---------- Safe Fetch with Timeout ----------
+async function fetchWithTimeout(url, { timeout = 5000, fallback = null } = {}) {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeout);
   try {
-    const res = await fetch(url);
+    const res = await fetch(url, { signal: controller.signal });
     if (!res.ok) return fallback;
     return await res.json();
   } catch {
     return fallback;
+  } finally {
+    clearTimeout(id);
   }
 }
 
-
+// ---------- Static Paths ----------
 export async function getStaticPaths() {
-  const allowedSlugs = [
-    'business',
-    'technology',
-    'sports',
-    'health',
-    'entertainment',
-    'politics',
-    'national-news',
-  ];
-
-
-  let categoryPaths = [];
-  try {
-    const categories = await tryFetch(`${BASE_URL}/categories?per_page=100`, []);
-    categoryPaths = categories
-      .filter((cat) => allowedSlugs.includes(cat.slug))
-      .map((cat) => ({ params: { slug: [cat.slug] } }));
-  } catch {
-    categoryPaths = [];
-  }
-
-  // A few article paths
-  let postPaths = [];
-  try {
-    const posts = await tryFetch(`${BASE_URL}/posts?per_page=10&_embed=1`, []);
-    postPaths = posts.map((post) => ({
-      params: {
-        slug: [
-          post._embedded?.['wp:term']?.[0]?.[0]?.slug || 'uncategorized',
-          String(post.id),
-          post.slug,
-        ],
-      },
-    }));
-  } catch {
-    postPaths = [];
-  }
-
+  // 🚀 Do not prebuild any paths at compile time
   return {
-    paths: [...categoryPaths, ...postPaths],
+    paths: [],
     fallback: 'blocking',
   };
 }
 
-// -------- Data fetching for each slug --------
+// ---------- Static Props ----------
 export async function getStaticProps({ params }) {
   if (!params?.slug) {
     return { props: { pageType: null }, revalidate: REVALIDATE };
@@ -74,9 +41,9 @@ export async function getStaticProps({ params }) {
     // Category page
     if (params.slug.length === 1) {
       const categorySlug = params.slug[0];
-      const categories = await tryFetch(
+      const categories = await fetchWithTimeout(
         `${BASE_URL}/categories?slug=${categorySlug}`,
-        []
+        { fallback: [] }
       );
       const category = categories?.[0];
 
@@ -87,9 +54,9 @@ export async function getStaticProps({ params }) {
         };
       }
 
-      const articles = await tryFetch(
+      const articles = await fetchWithTimeout(
         `${BASE_URL}/posts?categories=${category.id}&_embed=1&per_page=20&orderby=date&order=desc`,
-        []
+        { fallback: [] }
       );
 
       return {
@@ -101,9 +68,9 @@ export async function getStaticProps({ params }) {
     // Article page
     if (params.slug.length === 3) {
       const articleId = params.slug[1];
-      const article = await tryFetch(
+      const article = await fetchWithTimeout(
         `${BASE_URL}/posts/${articleId}?_embed=1`,
-        null
+        { fallback: null }
       );
 
       if (!article) {
@@ -112,16 +79,16 @@ export async function getStaticProps({ params }) {
 
       const categoryIds = article.categories || [];
       const relatedArticles = categoryIds.length
-        ? (await tryFetch(
+        ? (await fetchWithTimeout(
             `${BASE_URL}/posts?categories=${categoryIds[0]}&per_page=5&_embed=1`,
-            []
-          )).filter((p) => p.id !== article.id)
+            { fallback: [] }
+          ))?.filter((p) => p.id !== article.id) || []
         : [];
 
-      const latestArticles = (await tryFetch(
-        `${BASE_URL}/posts?per_page=5&_embed=1`,
-        []
-      )).filter((p) => p.id !== article.id);
+      const latestArticles =
+        (await fetchWithTimeout(`${BASE_URL}/posts?per_page=5&_embed=1`, {
+          fallback: [],
+        }))?.filter((p) => p.id !== article.id) || [];
 
       return {
         props: {
@@ -140,7 +107,7 @@ export async function getStaticProps({ params }) {
   }
 }
 
-// -------- Component --------
+// ---------- Component ----------
 export default function SlugPage({
   pageType,
   article,
@@ -164,16 +131,16 @@ export default function SlugPage({
     if (pageType === 'article' && article?.id) {
       const cached = getArticleById(article.id);
       if (cached) {
-        setArticleState(cached); // immediate
+        setArticleState(cached); // show cached immediately
       } else {
         setArticle(article.id, article);
       }
 
-      // background refetch
+      // background refresh
       (async () => {
-        const fresh = await tryFetch(
+        const fresh = await fetchWithTimeout(
           `${BASE_URL}/posts/${article.id}?_embed=1`,
-          null
+          { fallback: null }
         );
         if (fresh?.id) {
           setArticle(fresh.id, fresh);
@@ -183,20 +150,19 @@ export default function SlugPage({
     }
   }, [pageType, article, getArticleById, setArticle]);
 
-  // Hydrate + background refetch for category
+  // Background refetch for category
   useEffect(() => {
     if (pageType === 'category' && categoryName) {
-      // background refetch
       (async () => {
-        const cats = await tryFetch(
+        const cats = await fetchWithTimeout(
           `${BASE_URL}/categories?slug=${categoryName.toLowerCase()}`,
-          []
+          { fallback: [] }
         );
         const category = cats?.[0];
         if (category?.id) {
-          const fresh = await tryFetch(
+          const fresh = await fetchWithTimeout(
             `${BASE_URL}/posts?categories=${category.id}&_embed=1&per_page=20&orderby=date&order=desc`,
-            []
+            { fallback: [] }
           );
           if (fresh?.length) {
             setCategoryArticles(fresh);
@@ -210,7 +176,6 @@ export default function SlugPage({
   if (router.isFallback) return <div>Loading…</div>;
 
   return (
-    <div>
     <div className="page-wrapper">
       <Navbar />
       <main className="main-content">
@@ -239,8 +204,10 @@ export default function SlugPage({
             trendingArticles={[]}
           />
         )}
+
+        {/* Fallback */}
+        {pageType === null && <p>Content not available.</p>}
       </main>
-      </div>
       <Footer />
     </div>
   );
