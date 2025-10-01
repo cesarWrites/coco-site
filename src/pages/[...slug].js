@@ -119,6 +119,7 @@ export default function SlugPage({
   if (router.isFallback) return <div>Loading…</div>;
 
   return (
+    <div>
     <div className="page-wrapper">
       <Navbar />
       <main className="main-content">
@@ -147,6 +148,7 @@ export default function SlugPage({
         )}
       </main>
       <Footer />
+      </div>
     </div>
   );
 }

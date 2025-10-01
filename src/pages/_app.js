@@ -16,11 +16,11 @@ function MyApp({ Component, pageProps }) {
     <>
     <Head>
     <link rel="icon" href="/favicon.svg" /> 
-    <title>COCO FM</title>
+    <title>COCO FM 98.9</title>
   </Head>
   <Component {...pageProps} />
   </>
   )
 }
 
-export default MyApp
+export default MyApp;

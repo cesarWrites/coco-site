@@ -8,7 +8,7 @@ export default function AdvertisingPage() {
   const [files, setFiles] = useState([]);
 
   useEffect(() => {
-    fetch("https://cocomedia.co.ke/wp-json/promos/v1/list")
+    fetch("https://backend.cocomedia.co.ke/wp-json/promos/v1/list")
       .then((res) => res.json())
       .then((data) => setFiles(data))
       .catch((err) => console.error("Failed to load promos:", err));

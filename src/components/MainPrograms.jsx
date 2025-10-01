@@ -5,10 +5,10 @@ import Image from 'next/image';
 import 'swiper/css';
 
 const bannerImages = [
-  { src: 'https://cocomedia.co.ke/wp-content/uploads/2025/03/rauka-na-coco-banner-new-2.png', alt: 'Morning Show' },
-  { src: 'https://cocomedia.co.ke/wp-content/uploads/2025/03/rauka-na-coco-banner-new-1.png', alt: 'News Hour' },
-  { src: 'https://cocomedia.co.ke/wp-content/uploads/2025/03/rauka-na-coco-banner-new-1.png', alt: 'Evening Drive' },
-  { src: 'https://cocomedia.co.ke/wp-content/uploads/2025/03/rauka-na-coco-banner-new-1.png', alt: 'Weekend Vibes' },
+  { src: 'https://backend.cocomedia.co.ke/wp-content/uploads/2025/03/rauka-na-coco-banner-new-2.png', alt: 'Morning Show' },
+  { src: 'https://backend.cocomedia.co.ke/wp-content/uploads/2025/03/rauka-na-coco-banner-new-1.png', alt: 'News Hour' },
+  { src: 'https://backend.cocomedia.co.ke/wp-content/uploads/2025/03/rauka-na-coco-banner-new-1.png', alt: 'Evening Drive' },
+  { src: 'https://backend.cocomedia.co.ke/wp-content/uploads/2025/03/rauka-na-coco-banner-new-1.png', alt: 'Weekend Vibes' },
 ];
 
 export default function ProgramBannerSlider() {
