@@ -14,7 +14,7 @@ function UploadButton() {
     const formData = new FormData();
     formData.append("file", file);
 
-    await fetch("https://cocomedia.co.ke/wp-json/reels/v1/upload", {
+    await fetch("https://backend.cocomedia.co.ke/wp-json/reels/v1/upload", {
       method: "POST",
       body: formData,
     });
@@ -35,7 +35,7 @@ export default function ReelsPage() {
   const [youtubeUrl, setYoutubeUrl] = useState("");
 
   useEffect(() => {
-    fetch("https://cocomedia.co.ke/wp-json/reels/v1/list")
+    fetch("https://backend.cocomedia.co.ke/wp-json/reels/v1/list")
       .then((res) => res.json())
       .then((data) => {
         if (data && data.livestream_url) {

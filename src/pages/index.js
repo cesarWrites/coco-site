@@ -221,7 +221,7 @@ export default function Home({ articles }) {
 
 export async function getStaticProps() {
   const articlesRaw = await safeFetchJson(
-    `https://cocomedia.co.ke/wp-json/wp/v2/posts?_embed=1&per_page=100&orderby=date&order=desc`,
+    `https://backend.cocomedia.co.ke/wp-json/wp/v2/posts?_embed=1&per_page=100&orderby=date&order=desc`,
     []
   );
 

@@ -1,5 +1,5 @@
 export default async function PromosAdminGallery() {
-    const res = await fetch("https://cocomedia.co.ke/wp-json/promos/v1/list", {
+    const res = await fetch("https://backend.cocomedia.co.ke/wp-json/promos/v1/list", {
       cache: "no-store",
     });
     const promos = await res.json();
