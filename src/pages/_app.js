@@ -10,6 +10,7 @@ import "../styles/advertising.css";
 import "../styles/reels.css"; 
 import "../styles/about.css"
 import Head from 'next/head';
+import { Analytics } from "@vercel/analytics/next"
 
 function MyApp({ Component, pageProps }) {
   return (
@@ -19,6 +20,7 @@ function MyApp({ Component, pageProps }) {
     <title>COCO FM 98.9</title>
   </Head>
   <Component {...pageProps} />
+  <Analytics /> 
   </>
   )
 }
