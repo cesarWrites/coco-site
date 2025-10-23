@@ -51,7 +51,7 @@ export default function Navbar() {
               <button onClick={() => toggleDropdown('news')}>News and Politics</button>
               {openDropdown === 'news' && (
                 <div className="dropdown">
-                  <Link href="/national-news" style={{color: "#000000"}}>News</Link>
+                  <Link href="/news" style={{color: "#000000"}}>News</Link>
                   <Link href="/politics" style={{color: "#000000"}}>Politics</Link>
                 </div>
               )}
@@ -71,6 +71,7 @@ export default function Navbar() {
             <Link href="/health">Health and Wellness</Link>
             {/* <Link href="/sports">Sports</Link> */}
             <Link href="/reels">Reels</Link>
+            {/* <Link href="/classifieds">Classifieds</Link> */}
           </div>
 
           {/* Mobile Toggle */}
