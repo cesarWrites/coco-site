@@ -12,10 +12,18 @@ import MainNewsCard from "@/components/MainNewsCard";
 import { normalizeArticle } from "@/utils/normalizeArticles";
 import { safeFetchJson } from '@/utils/safeJson';
 import { useArticleStore } from '@/store/articles';
+import SearchBar from '@/components/SearchBar';
+import demo from "../assets/kilifest.png";
+import demo1 from "../assets/kilifi_stars.png"
+import Image from "next/image";
 
 export default function Home({ articles }) {
   const [showLive, setShowLive] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [visible, setVisible] = useState(true);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+
 
   const normalizedArticles = articles.map(normalizeArticle);
   const setManyArticles = useArticleStore((s) => s.setManyArticles);
@@ -45,6 +53,19 @@ export default function Home({ articles }) {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+
+  const banners = [
+    { src: demo, link: "/stars2025", alt: "Banner 1" },
+    { src: demo1, link: "/stars2025", alt: "Banner 2" },
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % banners.length);
+    }, 6000); // change every 3 seconds
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div>
       <div className="page-wrapper">
@@ -53,7 +74,44 @@ export default function Home({ articles }) {
         </div>
         <main className="main-content">
           <div className="home-container">
-            <MainPrograms />
+          <SearchBar/>
+            {/* <MainPrograms /> */}
+        <div className="main-programs-wrapper">
+
+        <div className="banner-container">
+      {visible && (
+        <div className="banner-wrapper">
+          <button className="close-btn" onClick={() => setVisible(false)}>
+            X
+          </button>
+          {/* <div className="banners">
+            <a href="/upload-demo">
+              <img
+                src={demo.src}
+                alt="Banner 1"
+                className="demo-banner"
+              />
+            </a>
+            <a href="/upload-demo">
+              <img
+                src={demo1.src}
+                alt="Banner 2"
+                className="demo-banner"
+              />
+            </a>
+          </div> */}
+            <a href={banners[activeIndex].link}>
+        <Image
+          src={banners[activeIndex].src}
+          alt={banners[activeIndex].alt}
+          className="demo-banner"
+        />
+      </a>
+        </div>
+      )}
+    </div>
+      <MainPrograms />
+</div>
             <LiveVideoStream />
 
             {/* Top Stories */}

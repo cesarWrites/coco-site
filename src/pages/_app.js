@@ -9,7 +9,10 @@ import "../styles/LiveVideo.css";
 import "../styles/advertising.css";
 import "../styles/reels.css"; 
 import "../styles/about.css"
+import "../styles/classifieds.css";
+import "../styles/searchbar.css"
 import Head from 'next/head';
+import SearchBar from '@/components/SearchBar';
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
@@ -20,6 +23,7 @@ function MyApp({ Component, pageProps }) {
     <link rel="icon" href="/favicon.svg" /> 
     <title>COCO FM 98.9</title>
   </Head>
+  <SearchBar/>
   <Component {...pageProps} />
   <Analytics /> 
   <SpeedInsights />    

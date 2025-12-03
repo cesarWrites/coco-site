@@ -609,6 +609,216 @@
     flex-direction: column;
     gap: 1rem;
   }
+
+  /* Wrapper to position the banner above MainPrograms */
+.main-programs-wrapper {
+  position: relative;
+}
+
+/* Banner container */
+.demo-banner {
+  position: absolute;
+  top: -40px;                   
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 600px;
+  z-index: 1000;
+  display: block;
+  height: fit-content;
+  cursor: pointer;
+
+  /* smooth animation */
+  animation: pulseGlow 2.5s ease-in-out infinite;
+}
+.demo-banner:hover{
+  transform: scale(1.05);
+}
+
+/* The poster image */
+.demo-banner img {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0px 10px 25px rgba(0,0,0,0.25);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* Hover effect */
+.demo-banner:hover img {
+  transform: scale(1.03);
+  box-shadow: 0px 12px 30px rgba(0,0,0,0.35);
+}
+
+.upload-container {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 32px;
+}
+
+.tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.tab {
+  padding: 10px 20px;
+  border: 1px solid #ccc;
+  background: #eee;
+  cursor: pointer;
+  margin: 0 6px;
+  font-size: 16px;
+  transition: 0.2s;
+}
+
+.tab.active {
+  background: #ff4537;
+  color: white;
+  border-color: #ff4537;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form label {
+  margin-top: 12px;
+  font-weight: bold;
+}
+
+.form input[type="text"],
+.form input[type="file"] {
+  padding: 8px;
+  font-size: 16px;
+  margin-top: 4px;
+}
+
+.submit-btn {
+  margin-top: 20px;
+  padding: 12px;
+  font-size: 18px;
+  background: #1e90ff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.submit-btn:hover {
+  background: #0d6cd4;
+}
+
+/* Producer list */
+.list-container {
+  margin-top: 20px;
+}
+
+.song-card {
+  border: 1px solid #ccc;
+  padding: 14px;
+  margin-bottom: 16px;
+  border-radius: 8px;
+  background: #f9f9f9;
+}
+
+.download-btn {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 8px 14px;
+  background: #333;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+}
+
+.download-btn:hover {
+  background: black;
+}
+
+.upload-container {
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+.tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.tab {
+  padding: 0.5rem 1rem;
+  border: 1px solid #333;
+  cursor: pointer;
+  background: #f0f0f0;
+}
+.tab.active {
+  background: #333;
+  color: #fff;
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.submit-btn {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+.list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.song-card {
+  border: 1px solid #ccc;
+  padding: 1rem;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.download-btn {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.3rem 0.6rem;
+  background: #333;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 3px;
+}
+
+/* Subtle pulsing glow animation */
+@keyframes pulseGlow {
+  0% {
+    transform: translateX(-50%) scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: translateX(-50%) scale(1.015);
+    filter: brightness(1.08);
+  }
+  100% {
+    transform: translateX(-50%) scale(1);
+    filter: brightness(1);
+  }
+}
+
+/* Mobile adjustments */
+@media (max-width: 600px) {
+  .demo-banner {
+    width: 92%;
+    top: -30px;
+  }
+}
+
   
   /* Responsive layout for smaller screens */
   @media (max-width: 768px) {
@@ -689,6 +899,125 @@
       }
   }
 
+
+  .producer-login-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60vh; /* vertical centering */
+  }
+  
+  .producer-login-form {
+    background-color: #fff;
+    padding: 2rem 3rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .producer-login-form:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.25);
+  }
+  
+  .producer-login-form h2 {
+    margin-bottom: 1.5rem;
+    color: #222;
+  }
+  
+  .producer-login-form label {
+    display: block;
+    margin: 0.8rem 0 0.3rem;
+    font-weight: 500;
+  }
+  
+  .producer-login-form input {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  
+  .producer-login-form input:focus {
+    border-color: #0070f3;
+  }
+  
+  .producer-login-form button {
+    margin-top: 1.2rem;
+    padding: 0.7rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    background-color: #0070f3;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .producer-login-form button:hover {
+    background-color: #005bb5;
+  }
+  .banner-wrapper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .banners {
+    display: flex;
+    gap: 20px; /* space between banners */
+  }
+  
+  .banner-image {
+    max-width: 300px; /* adjust size */
+    height: auto;
+    display: block;
+    border-radius: 8px;
+  }
+  
+  /* Close button in the corner */
+  .close-btn {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background: #333;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 20px;
+  }
+  .inst-hint{
+    font-weight: bold;
+  }
+  .talent-sect {
+    display: flex;
+    flex-direction: column; /* stack items vertically */
+    align-items: center;    /* center horizontally */
+    justify-content: center; /* center vertically if needed */
+    text-align: center;      /* center text inside elements */
+    gap: 20px;               /* spacing between elements */
+    padding: 40px 20px;      /* some padding around the section */
+    max-width: 800px;        /* optional: limit width */
+    margin: 0 auto;          /* center the section in the page */
+  }
+  
+  .talent-sect img {
+    max-width: 100%; /* make image responsive */
+    height: auto;
+    border-radius: 8px; /* optional: rounded corners */
+  }
+  
+  
   
 
   
