@@ -7,7 +7,7 @@ export default function ClassifiedsPage() {
   const [classifieds, setClassifieds] = useState([]);
 
   useEffect(() => {
-    fetch("https://backend.example.com/classifieds_api.php?action=list")
+    fetch("https://backend.cocomedia.co.ke/classifieds_api.php?action=list")
       .then((res) => res.json())
       .then(setClassifieds)
       .catch(console.error);

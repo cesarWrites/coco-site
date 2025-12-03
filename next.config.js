@@ -52,12 +52,12 @@ const nextConfig = {
       // REST API requests -> WordPress
       {
         source: "/wp-json/:path*",
-        destination: "https://backend.example.com/wp-json/:path*",
+        destination: "https://backend.cocomedia.co.ke/wp-json/:path*",
       },
       // Media uploads -> WordPress
       {
         source: "/wp-content/uploads/:path*",
-        destination: "https://backend.example.com/wp-content/uploads/:path*",
+        destination: "https://backend.cocomedia.co.ke/wp-content/uploads/:path*",
       },
     ];
   },
