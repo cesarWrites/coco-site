@@ -9,7 +9,7 @@ export default function ArtistUploadPage() {
   const [phone, setPhone] = useState("");
   const [idCopy, setIdCopy] = useState(null);
   const [demoTrack, setDemoTrack] = useState(null);
-  const [social, setSocial] = useState("");
+  const [socials, setSocials] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,7 +20,7 @@ export default function ArtistUploadPage() {
     formData.append("artistName", name);
     formData.append("email", email);
     formData.append("phone", phone);
-    formData.append("social", social);
+    formData.append("socials", social);
     formData.append("idCopy", idCopy);
     formData.append("demoTrack", demoTrack);
 
@@ -106,12 +106,12 @@ export default function ArtistUploadPage() {
           onChange={(e) => setDemoTrack(e.target.files[0])}
           accept="audio/*"
         />
-
+        <label> Social Media handles</label>
         <textarea
           required
           placeholder="Facebook: …\nInstagram: …\nTikTok: …\nX (Twitter): …"
-          value={social}
-          onChange={(e) => setSocial(e.target.value)}
+          value={socials}
+          onChange={(e) => setSocials(e.target.value)}
         ></textarea>
 
         <button type="submit" className="submit-btn">
