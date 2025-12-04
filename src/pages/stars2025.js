@@ -1,67 +1,53 @@
-import { useState, useEffect } from "react";
+"use client";
+import { useState } from "react";
 import Image from "next/image";
-import demo1 from "../assets/kilifest.png"
+import demo1 from "../assets/kilifi_stars.jpeg"
 
+export default function ArtistUploadPage() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [idCopy, setIdCopy] = useState(null);
+  const [demoTrack, setDemoTrack] = useState(null);
+  const [social, setSocial] = useState("");
 
-export default function UploadDemo() {
-  const [activeTab, setActiveTab] = useState("artist");
-  const [artistName, setArtistName] = useState("");
-  const [contact, setContact] = useState("");
-  const [file, setFile] = useState(null);
-  const [songs, setSongs] = useState([]);
-
-  // Producer login state
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-
-  // Fetch songs when Producer tab is active
-  useEffect(() => {
-    if (activeTab === "producer" && loggedIn) {
-      fetch("https://backend.cocomedia.co.ke/wp-json/music/v1/list")
-        .then((res) => res.json())
-        .then((data) => {
-          setSongs(Array.isArray(data.songs) ? data.songs : []);
-        })
-        .catch((err) => {
-          console.error(err);
-          setSongs([]);
-        });
-    }
-  }, [activeTab, loggedIn]);
-
-  // Artist upload handler
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!file) return alert("Please select a song file.");
+    if (!demoTrack) return alert("Please upload your demo track.");
+    if (!idCopy) return alert("Please upload a copy of your ID.");
 
     const formData = new FormData();
-    formData.append("artistName", artistName);
-    formData.append("contact", contact);
-    formData.append("file", file);
+    formData.append("artistName", name);
+    formData.append("email", email);
+    formData.append("phone", phone);
+    formData.append("social", social);
+    formData.append("idCopy", idCopy);
+    formData.append("demoTrack", demoTrack);
 
     try {
-      const res = await fetch("/wp-json/music/v1/upload", {
+      const res = await fetch("https://backend.cocomedia.co.ke/wp-json/music/v1/upload", {
         method: "POST",
         body: formData,
       });
 
+      const text = await res.text(); // read ONCE
       let data;
+
       try {
-        data = await res.json();
+        data = JSON.parse(text);
       } catch {
-        const text = await res.text();
-        console.error("Raw server response:", text);
-        alert("Upload failed. Check console for details.");
-        return;
+        console.error("Server text response:", text);
+        return alert("Upload failed — server returned invalid response.");
       }
 
       if (res.ok) {
         alert("Upload successful!");
-        setArtistName("");
-        setContact("");
-        setFile(null);
+        setName("");
+        setEmail("");
+        setPhone("");
+        setSocial("");
+        setIdCopy(null);
+        setDemoTrack(null);
       } else {
         alert("Upload failed: " + (data?.error || "Unknown error"));
       }
@@ -71,140 +57,68 @@ export default function UploadDemo() {
     }
   };
 
-  // Producer login handler
-  const handleLogin = (e) => {
-    e.preventDefault();
-    const validUsername = "admin"
-    const validPassword = "secret123"
-
-    console.log("user", process.env.PRODUCER_USERNAME)
-
-    if (username === validUsername && password === validPassword) {
-      setLoggedIn(true);
-    } else {
-      alert("Invalid credentials");
-    }
-  };
-
   return (
-    <div className="upload-container">
-       <a href="/">
+    <div>
+        <a href="/">
        Home
             </a>
-      <h1 className="title">Kilifi Festival</h1>
+    <div className="upload-page">
 
-      {/* Tabs */}
-      <div className="tabs">
-        <button
-          className={activeTab === "artist" ? "tab active" : "tab"}
-          onClick={() => setActiveTab("artist")}
-        >
-          Artist Song Upload
-        </button>
-        <button
-          className={activeTab === "producer" ? "tab active" : "tab"}
-          onClick={() => setActiveTab("producer")}
-        >
-          Kilifi Talent 
-        </button>
+      {/* Banner */}
+      <div className="banner-wrapper1">
+        <Image 
+          src={demo1}
+          alt="Kilifi Festival Talent Banner"
+          className="banner-img1"
+          priority
+        />
       </div>
 
-      {/* Artist Tab */}
-      {activeTab === "artist" && (
-        <form className="form" onSubmit={handleSubmit}>
-            <div className="inst-hint">
-            <p>1. Only Upload a .mp3 file</p>
-            <p>2. Use your name as the file name</p>
-            </div>
-          <label>Artist Name</label>
-          <input
-            type="text"
-            required
-            value={artistName}
-            onChange={(e) => setArtistName(e.target.value)}
-          />
+      <h1 className="title">Kilifi All Stars 2025 Application </h1>
 
-          <label>Contact</label>
-          <input
-            type="text"
-            required
-            value={contact}
-            onChange={(e) => setContact(e.target.value)}
-          />
+      <form className="artist-form" onSubmit={handleSubmit}>
 
-          <label>Upload Song</label>
-          <input
-            type="file"
-            accept="audio/*"
-            required
-            onChange={(e) => setFile(e.target.files[0])}
-          />
+        <p className="notice">
+          Submit your demo track to be considered for Kilifi All Stars Contest.
+        </p>
 
-          <button type="submit" className="submit-btn">
-            Upload Song
-          </button>
-        </form>
-      )}
+        <label>Name</label>
+        <input type="text" required value={name} onChange={(e) => setName(e.target.value)} />
 
-      {/* Producer Tab */}
-      {/* {activeTab === "producer" && (
-        <div className="producer-login-wrapper">
-          {!loggedIn ? (
-            <form onSubmit={handleLogin} className="producer-login-form">
-              <h3>Producer Login</h3>
-              <input
-                type="text"
-                placeholder="Username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-              />
-              <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-              <button type="submit">Login</button>
-            </form>
-          ) : (
-            <div className="list-container">
-              {songs.length === 0 ? (
-                <p>No songs uploaded yet.</p>
-              ) : (
-                songs.map((song, i) => (
-                  <div key={i} className="song-card">
-                    <div>
-                      <strong>{song.artistName}</strong>
-                      <br />
-                      <small>{song.contact}</small>
-                    </div>
+        <label>Email</label>
+        <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
 
-                    <audio controls src={song.fileUrl}></audio>
+        <label>Phone</label>
+        <input type="text" required value={phone} onChange={(e) => setPhone(e.target.value)} />
 
-                    <a className="download-btn" href={song.fileUrl} download>
-                      Download
-                    </a>
-                  </div>
-                ))
-              )}
-            </div>
-          )}
-        </div>
-      )} */}
-      {activeTab === "producer" && (
-        <div className="talent-sect">
-            <h2>Be part of the Kilifi Festival experience</h2>
-            <Image 
-            src={demo1}
-            alt="Talent fest"
-            width={600}
-            height={400}
-            />
-            </div>
-)}
+        <label>Copy of ID (jpg/png/pdf)</label>
+        <input
+          type="file"
+          required
+          onChange={(e) => setIdCopy(e.target.files[0])}
+          accept=".jpg,.jpeg,.png,.pdf"
+        />
 
+        <label>Upload Demo Track (.mp3)</label>
+        <input
+          type="file"
+          required
+          onChange={(e) => setDemoTrack(e.target.files[0])}
+          accept="audio/*"
+        />
+
+        <textarea
+          required
+          placeholder="Facebook: …\nInstagram: …\nTikTok: …\nX (Twitter): …"
+          value={social}
+          onChange={(e) => setSocial(e.target.value)}
+        ></textarea>
+
+        <button type="submit" className="submit-btn">
+          Submit Demo
+        </button>
+      </form>
+    </div>
     </div>
   );
 }

@@ -14,7 +14,7 @@ import { safeFetchJson } from '@/utils/safeJson';
 import { useArticleStore } from '@/store/articles';
 import SearchBar from '@/components/SearchBar';
 import demo from "../assets/kilifest.png";
-import demo1 from "../assets/kilifi_stars.png"
+import demo1 from "../assets/kilifi_stars.jpeg"
 import Image from "next/image";
 
 export default function Home({ articles }) {
@@ -74,42 +74,26 @@ export default function Home({ articles }) {
         </div>
         <main className="main-content">
           <div className="home-container">
-          <SearchBar/>
             {/* <MainPrograms /> */}
         <div className="main-programs-wrapper">
 
-        <div className="banner-container">
-      {visible && (
-        <div className="banner-wrapper">
-          <button className="close-btn" onClick={() => setVisible(false)}>
-            X
-          </button>
-          {/* <div className="banners">
-            <a href="/upload-demo">
-              <img
-                src={demo.src}
-                alt="Banner 1"
-                className="demo-banner"
-              />
-            </a>
-            <a href="/upload-demo">
-              <img
-                src={demo1.src}
-                alt="Banner 2"
-                className="demo-banner"
-              />
-            </a>
-          </div> */}
-            <a href={banners[activeIndex].link}>
-        <Image
-          src={banners[activeIndex].src}
-          alt={banners[activeIndex].alt}
-          className="demo-banner"
-        />
-      </a>
-        </div>
-      )}
+        {visible && (
+  <>
+    <div className="banner-overlay" onClick={() => setVisible(false)}></div>
+    <div className="banner-wrapper">
+      <button className="close-btn" onClick={() => setVisible(false)}>×</button>
+      <div className="banners">
+        <a href="/stars2025">
+          <img src={demo1.src} alt="Banner 1" className="demo-banner" />
+        </a>
+        <a href="/kilifest">
+          <img src={demo.src} alt="Banner 2" className="demo-banner" />
+        </a>
+      </div>
     </div>
+  </>
+)}
+
       <MainPrograms />
 </div>
             <LiveVideoStream />

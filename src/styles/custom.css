@@ -615,40 +615,6 @@
   position: relative;
 }
 
-/* Banner container */
-.demo-banner {
-  position: absolute;
-  top: -40px;                   
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  max-width: 600px;
-  z-index: 1000;
-  display: block;
-  height: fit-content;
-  cursor: pointer;
-
-  /* smooth animation */
-  animation: pulseGlow 2.5s ease-in-out infinite;
-}
-.demo-banner:hover{
-  transform: scale(1.05);
-}
-
-/* The poster image */
-.demo-banner img {
-  width: 100%;
-  height: auto;
-  border-radius: 12px;
-  box-shadow: 0px 10px 25px rgba(0,0,0,0.25);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-
-/* Hover effect */
-.demo-banner:hover img {
-  transform: scale(1.03);
-  box-shadow: 0px 12px 30px rgba(0,0,0,0.35);
-}
 
 .upload-container {
   max-width: 700px;
@@ -1016,8 +982,249 @@
     height: auto;
     border-radius: 8px; /* optional: rounded corners */
   }
+
+
+  /*Upload Logic*/
+  .upload-page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .banner-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .banner-img1 {
+    width: 100%;
+    max-height: 300px;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+
+  .title {
+    font-size: 28px;
+    margin: 10px 0 25px;
+    font-weight: bold;
+  }
+
+  .artist-form {
+    background: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    text-align: left;
+  }
+
+  .artist-form label {
+    font-weight: bold;
+    margin-top: 10px;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="file"] {
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+  }
+
+  .submit-btn {
+    margin-top: 20px;
+    padding: 14px;
+    background: #d32f2f;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  .submit-btn:hover {
+    background: #b71c1c;
+  }
+
+  .notice {
+    background: #fff3cd;
+    padding: 10px;
+    border-left: 4px solid #ff9800;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    color: #856404;
+  }
+  .beauty-page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .banner-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .banner-img {
+    width: 100%;
+    max-height: 300px;
+    object-fit: cover;
+    border-radius: 12px;
+  }
+
+  .title {
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+
+  .beauty-form {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    text-align: left;
+  }
+
+  .notice {
+    background: #fff3e0;
+    padding: 12px;
+    border-left: 4px solid #fb8c00;
+    color: #7a4e00;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+
+  input,
+  textarea {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+  }
+
+  textarea {
+    height: 120px;
+    resize: vertical;
+  }
+
+  .submit-btn {
+    margin-top: 20px;
+    padding: 14px;
+    background: #c2185b;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+
+  .submit-btn:hover {
+    background: #880e4f;
+  }
+
+  .banner-wrapper {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 900px;
+    width: 90%;
+    background: #fff;
+    padding: 20px;
+    z-index: 9999; /* ensures it's on top of other content */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    border-radius: 10px;
+  }
+  
+  .banner-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5); /* dim background */
+    z-index: 9998;
+  }
   
   
+  
+  .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #ff4d4f;
+    color: #fff;
+    border: none;
+    font-size: 20px;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+  }
+  
+  .banners {
+    display: flex;
+    gap: 20px; 
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .banners a {
+    display: inline-block;
+  }
+  
+  .demo-banner {
+    max-width: 100%;
+    min-width: 400px;
+    height: 400px;
+    border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .demo-banner:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+  }
+
+
+/* Responsive: stack images vertically on small screens */
+@media screen and (max-width: 768px) {
+  .banners {
+    flex-direction: column; 
+    gap: 15px;
+    margin: 2%;
+  }
+
+  .banners a {
+  display: block;
+  width: 90%;     
+  max-width: 400px;
+  margin: 2%; 
+  }
+
+  .demo-banner {
+    width: 100%;     
+    height: auto;    
+    max-height: 300px; 
+    object-fit: cover; 
+    border-radius: 8px;
+    margin-right: 2%;
+  }
+}
   
 
   
