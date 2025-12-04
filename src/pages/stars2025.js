@@ -20,7 +20,7 @@ export default function ArtistUploadPage() {
     formData.append("artistName", name);
     formData.append("email", email);
     formData.append("phone", phone);
-    formData.append("socials", social);
+    formData.append("socials", socials);
     formData.append("idCopy", idCopy);
     formData.append("demoTrack", demoTrack);
 
