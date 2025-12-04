@@ -45,7 +45,7 @@ export default function ArtistUploadPage() {
         setName("");
         setEmail("");
         setPhone("");
-        setSocial("");
+        setSocials("");
         setIdCopy(null);
         setDemoTrack(null);
       } else {
