@@ -14,7 +14,7 @@ import { safeFetchJson } from '@/utils/safeJson';
 import { useArticleStore } from '@/store/articles';
 import SearchBar from '@/components/SearchBar';
 import demo from "../assets/kilifest.png";
-import demo1 from "../assets/kilifi_stars.jpeg"
+import demo1 from "../assets/kilifi_stars.png"
 import Image from "next/image";
 
 export default function Home({ articles }) {

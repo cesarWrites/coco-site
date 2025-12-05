@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-import demo1 from "../assets/kilifi_stars.jpeg"
+import demo1 from "../assets/kilifi_stars.png"
 
 export default function ArtistUploadPage() {
   const [name, setName] = useState("");
