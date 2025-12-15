@@ -13,9 +13,6 @@ import { normalizeArticle } from "@/utils/normalizeArticles";
 import { safeFetchJson } from '@/utils/safeJson';
 import { useArticleStore } from '@/store/articles';
 import SearchBar from '@/components/SearchBar';
-import demo from "../assets/kilifest.png";
-import demo1 from "../assets/kilifi_stars.png"
-import Image from "next/image";
 
 export default function Home({ articles }) {
   const [showLive, setShowLive] = useState(false);
@@ -54,18 +51,6 @@ export default function Home({ articles }) {
   }, []);
 
 
-  const banners = [
-    { src: demo, link: "/stars2025", alt: "Banner 1" },
-    { src: demo1, link: "/stars2025", alt: "Banner 2" },
-  ];
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % banners.length);
-    }, 6000); // change every 3 seconds
-    return () => clearInterval(interval);
-  }, []);
-
   return (
     <div>
       <div className="page-wrapper">
@@ -76,23 +61,6 @@ export default function Home({ articles }) {
           <div className="home-container">
             {/* <MainPrograms /> */}
         <div className="main-programs-wrapper">
-
-        {visible && (
-  <>
-    <div className="banner-overlay" onClick={() => setVisible(false)}></div>
-    <div className="banner-wrapper">
-      <button className="close-btn" onClick={() => setVisible(false)}>×</button>
-      <div className="banners">
-        <a href="/stars2025">
-          <img src={demo1.src} alt="Banner 1" className="demo-banner" />
-        </a>
-        <a href="/kilifest">
-          <img src={demo.src} alt="Banner 2" className="demo-banner" />
-        </a>
-      </div>
-    </div>
-  </>
-)}
 
       <MainPrograms />
 </div>
