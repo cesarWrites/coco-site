@@ -12,6 +12,7 @@ import MainNewsCard from "@/components/MainNewsCard";
 import { normalizeArticle } from "@/utils/normalizeArticles";
 import { safeFetchJson } from '@/utils/safeJson';
 import { useArticleStore } from '@/store/articles';
+import { useArticleAutoRefresh } from '@/hooks/useArticleAutoRefresh';
 import SearchBar from '@/components/SearchBar';
 
 export default function Home({ articles }) {
@@ -19,7 +20,6 @@ export default function Home({ articles }) {
   const [isMobile, setIsMobile] = useState(false);
   const [visible, setVisible] = useState(true);
   const [activeIndex, setActiveIndex] = useState(0);
-
 
 
   const normalizedArticles = articles.map(normalizeArticle);
@@ -49,6 +49,7 @@ export default function Home({ articles }) {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+  useArticleAutoRefresh();
 
 
   return (
