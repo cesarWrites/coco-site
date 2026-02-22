@@ -3,7 +3,7 @@ export default function LiveVideoStream() {
       <div className="video-wrapper">
         <h2 className="text-xl font-semibold mb-4">Live Video Broadcast</h2>
         <div className="video-container">
-          <iframe
+          {/* <iframe
             width="100%"
             height="100%"
             src="https://www.youtube.com/embed/live_stream?channel=8VGkccmdts0&autoplay=1"
@@ -11,7 +11,16 @@ export default function LiveVideoStream() {
             frameBorder="0"
             allow="autoplay; encrypted-media"
             allowFullScreen
-          ></iframe>
+          ></iframe> */}
+          <div style={{ width: "100%", height: "500px" }}>
+        <iframe
+          width="100%"
+          height="100%"
+          src="https://www.youtube.com/embed/8VGkccmdts0"
+          allow="autoplay; encrypted-media"
+          allowFullScreen
+        />
+</div>
         </div>
       </div>
     );
