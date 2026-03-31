@@ -17,8 +17,8 @@
 .program-banner-slide {
   position: relative;
   overflow: hidden;
-  max-height: 300px; /* Or another suitable value */
-  height: 40vw;       /* Responsive height based on screen width */
+  max-height: 300px; 
+  height: 40vw;       
   display: flex;
   align-items: center;
   justify-content: center;

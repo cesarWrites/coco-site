@@ -941,7 +941,7 @@
   }
   
   .banner-image {
-    max-width: 300px; /* adjust size */
+    max-width: 300px; 
     height: auto;
     display: block;
     border-radius: 8px;
@@ -1001,8 +1001,8 @@
 
   .banner-img1 {
     width: 100%;
-    max-height: 300px;
-    object-fit: cover;
+    height: fit-content;
+    /* object-fit: cover; */
     border-radius: 10px;
   }
 
@@ -1075,8 +1075,9 @@
 
   .banner-img {
     width: 100%;
-    max-height: 300px;
-    object-fit: cover;
+    max-height: 40vw;
+    height: fit-content;
+    object-fit: contain;
     border-radius: 12px;
   }
 

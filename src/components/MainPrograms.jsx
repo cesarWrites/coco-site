@@ -5,10 +5,10 @@ import Image from 'next/image';
 import 'swiper/css';
 
 const bannerImages = [
-  { src: 'https://backend.cocomedia.co.ke/wp-content/uploads/2025/03/rauka-na-coco-banner-new-2.png', alt: 'Morning Show' },
-  { src: 'https://backend.cocomedia.co.ke/wp-content/uploads/2025/03/rauka-na-coco-banner-new-1.png', alt: 'News Hour' },
-  { src: 'https://backend.cocomedia.co.ke/wp-content/uploads/2025/03/rauka-na-coco-banner-new-1.png', alt: 'Evening Drive' },
-  { src: 'https://backend.cocomedia.co.ke/wp-content/uploads/2025/03/rauka-na-coco-banner-new-1.png', alt: 'Weekend Vibes' },
+  { src: 'https://backend.cocomedia.co.ke/wp-content/uploads/2026/03/COCO ASUBUHI.jpeg', alt: 'Morning Show' },
+  { src: 'https://backend.cocomedia.co.ke/wp-content/uploads/2026/03/COCO ASUBUHI.jpeg', alt: 'News Hour' },
+  { src: 'https://backend.cocomedia.co.ke/wp-content/uploads/2026/03/COCO ASUBUHI.jpeg', alt: 'Evening Drive' },
+  { src: 'https://backend.cocomedia.co.ke/wp-content/uploads/2026/03/COCO ASUBUHI.jpeg', alt: 'Weekend Vibes' },
 ];
 
 export default function ProgramBannerSlider() {
@@ -17,7 +17,7 @@ export default function ProgramBannerSlider() {
       <Swiper
         modules={[Autoplay]}
         spaceBetween={20}
-        slidesPerView={1}
+        slidesPerView={2}
         autoplay={{ delay: 3000 }}
         loop
         breakpoints={{
@@ -33,7 +33,7 @@ export default function ProgramBannerSlider() {
                 src={img.src}
                 alt={img.alt}
                 // width={800}
-                height={400}
+                // height={800}
                 className="banner-img"
               />
             </div>
