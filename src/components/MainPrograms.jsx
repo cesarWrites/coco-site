@@ -17,8 +17,8 @@ export default function ProgramBannerSlider() {
       <Swiper
         modules={[Autoplay]}
         spaceBetween={20}
-        slidesPerView={2}
-        autoplay={{ delay: 3000 }}
+        slidesPerView={1}
+        autoplay={{ delay: 5000 }}
         loop
         breakpoints={{
           768: {

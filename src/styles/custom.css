@@ -1075,9 +1075,9 @@
 
   .banner-img {
     width: 100%;
-    max-height: 40vw;
-    height: fit-content;
-    object-fit: contain;
+    max-height: 50vw;
+    height: auto;
+    object-fit: cover;
     border-radius: 12px;
   }
 
@@ -1224,6 +1224,17 @@
     object-fit: cover; 
     border-radius: 8px;
     margin-right: 2%;
+  }
+}
+
+@media (max-width: 640px) {
+  .banner-img {
+    max-height: fit-content;
+    border-radius: 8px;
+  }
+
+  .program-banner-container {
+    padding: 0 8px;
   }
 }
   
