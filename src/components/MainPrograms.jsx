@@ -5,10 +5,13 @@ import Image from 'next/image';
 import 'swiper/css';
 
 const bannerImages = [
-  { src: 'https://backend.cocomedia.co.ke/wp-content/uploads/2026/03/COCO ASUBUHI.jpeg', alt: 'Morning Show' },
-  { src: 'https://backend.cocomedia.co.ke/wp-content/uploads/2026/03/COCO ASUBUHI.jpeg', alt: 'News Hour' },
-  { src: 'https://backend.cocomedia.co.ke/wp-content/uploads/2026/03/COCO ASUBUHI.jpeg', alt: 'Evening Drive' },
-  { src: 'https://backend.cocomedia.co.ke/wp-content/uploads/2026/03/COCO ASUBUHI.jpeg', alt: 'Weekend Vibes' },
+  { src: 'https://backend.cocomedia.co.ke/wp-content/uploads/2026/04/COCO ASUBUHI.jpeg', alt: 'Morning Show' },
+  { src: 'https://backend.cocomedia.co.ke/wp-content/uploads/2026/04/RHUMBA.jpeg', alt: 'RHUMBA' },
+  { src: 'https://backend.cocomedia.co.ke/wp-content/uploads/2026/04/COCO SHAMBANI.jpeg', alt: 'News Hour' },
+  { src: 'https://backend.cocomedia.co.ke/wp-content/uploads/2026/04/JUNGU.jpeg', alt: 'Evening Drive' },
+  { src: 'https://backend.cocomedia.co.ke/wp-content/uploads/2026/04/KIPENGA.jpeg', alt: 'News Hour' },
+  { src: 'https://backend.cocomedia.co.ke/wp-content/uploads/2026/04/MSERENGO.jpeg', alt: 'Weekend Vibes' },
+  { src: 'https://backend.cocomedia.co.ke/wp-content/uploads/2026/04/REGGAE.jpeg', alt: 'News Hour' },
 ];
 
 export default function ProgramBannerSlider() {
