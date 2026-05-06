@@ -11,8 +11,10 @@ import {
     FaEnvelope,
     FaLink
   } from "react-icons/fa6";
+
   
   export default function ArticleView({ article, relatedArticles, latestArticles, trendingArticles}) {
+    const articleUrl = `https://cocomedia.co.ke/news/${article.id}/${article.slug}`;
     if (!article?.id) return <div>Loading content...</div>;
     // const normalizedArticles = articles.map(normalizeArticle);
     const normalizedLatest = latestArticles.map(normalizeArticle);
@@ -61,7 +63,7 @@ import {
             <p className='social-share-text'>Share with friends.</p>
             <div className="social-share">
               <a
-                href={`https://twitter.com/share?url=https://cocomedia.co.ke/article/${article.slug}&text=${title}`}
+                href={`https://twitter.com/share?url=${articleUrl}&text=${title}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="icon twitter"
@@ -70,7 +72,7 @@ import {
                 <FaXTwitter />
               </a>
               <a
-                href={`https://www.facebook.com/sharer/sharer.php?u=https://cocomedia.co.ke/article/${article.slug}`}
+                href={`https://www.facebook.com/sharer/sharer.php?u=${articleUrl}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="icon facebook"
@@ -79,7 +81,7 @@ import {
                 <FaFacebookF />
               </a>
               <a
-                href={`https://www.linkedin.com/shareArticle?mini=true&url=https://cocomedia.co.ke/article/${article.slug}&title=${title}`}
+                href={`https://www.linkedin.com/shareArticle?mini=true&url=${articleUrl}&title=${title}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="icon linkedin"
@@ -88,7 +90,7 @@ import {
                 <FaLinkedinIn />
               </a>
               <a
-                href={`https://api.whatsapp.com/send?text=${title} https://cocomedia.co.ke/article/${article.slug}`}
+                href={`https://api.whatsapp.com/send?text=${title} ${articleUrl}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="icon whatsapp"
@@ -97,7 +99,7 @@ import {
                 <FaWhatsapp />
               </a>
               <a
-                href={`mailto:?subject=${title}&body=Check this out: https://cocomedia.co.ke/article/${article.slug}`}
+                href={`mailto:?subject=${title}&body=Check this out: ${articleUrl}`}
                 className="icon email"
                 aria-label="Share via Email"
               >
@@ -105,7 +107,7 @@ import {
               </a>
               <button
                 onClick={() => {
-                  navigator.clipboard.writeText(`https://cocomedia.co.ke/article/${article.slug}`);
+                  navigator.clipboard.writeText(`${articleUrl}`);
                   alert('Link copied!');
                 }}
                 className="icon copy"
